@@ -15,7 +15,7 @@ import com.autobots.automanager.entidades.Venda;
 import com.autobots.automanager.enumeracoes.PerfilUsuario;
 import com.autobots.automanager.enumeracoes.TipoDocumento;
 import com.autobots.automanager.enumeracoes.TipoVeiculo;
-import com.autobots.automanager.entidades.CredencialUsuarioSenha;
+import com.autobots.automanager.entidades.Credencial;
 import com.autobots.automanager.entidades.Documento;
 import com.autobots.automanager.entidades.Email;
 import com.autobots.automanager.entidades.Empresa;
@@ -63,7 +63,7 @@ public class AutomanagerApplication {
 			Usuario funcionario = new Usuario();
 			funcionario.setNome("Pedro Alcântara de Bragança e Bourbon");
 			funcionario.setNomeSocial("Dom Pedro");
-			funcionario.getPerfis().add(PerfilUsuario.FUNCIONARIO);
+			funcionario.getPerfis().add(PerfilUsuario.ROLE_VENDEDOR);
 
 			Email emailFuncionario = new Email();
 			emailFuncionario.setEndereco("a@a.com");
@@ -95,33 +95,33 @@ public class AutomanagerApplication {
 
 			funcionario.getDocumentos().add(cpf);
 
-			CredencialUsuarioSenha credencialFuncionario = new CredencialUsuarioSenha();
+			Credencial credencialFuncionario = new Credencial();
 			credencialFuncionario.setInativo(false);
 			credencialFuncionario.setNomeUsuario("dompedrofuncionario");
 			credencialFuncionario.setSenha("123456");
 			credencialFuncionario.setCriacao(new Date());
 			credencialFuncionario.setUltimoAcesso(new Date());
 
-			funcionario.getCredenciais().add(credencialFuncionario);
+			funcionario.setCredencial(credencialFuncionario);
 
 			Usuario fornecedor = new Usuario();
 			fornecedor.setNome("Componentes varejo de partes automotivas ltda");
 			fornecedor.setNomeSocial("Loja do carro, vendas de componentes automotivos");
-			fornecedor.getPerfis().add(PerfilUsuario.FORNECEDOR);
+			fornecedor.getPerfis().add(PerfilUsuario.ROLE_GERENTE);
 
 			Email emailFornecedor = new Email();
 			emailFornecedor.setEndereco("f@f.com");
 
 			fornecedor.getEmails().add(emailFornecedor);
 
-			CredencialUsuarioSenha credencialFornecedor = new CredencialUsuarioSenha();
+			Credencial credencialFornecedor = new Credencial();
 			credencialFornecedor.setInativo(false);
 			credencialFornecedor.setNomeUsuario("dompedrofornecedor");
 			credencialFornecedor.setSenha("123456");
 			credencialFornecedor.setCriacao(new Date());
 			credencialFornecedor.setUltimoAcesso(new Date());
 
-			fornecedor.getCredenciais().add(credencialFornecedor);
+			fornecedor.setCredencial(credencialFornecedor);
 
 			Documento cnpj = new Documento();
 			cnpj.setDataEmissao(new Date());
@@ -158,7 +158,7 @@ public class AutomanagerApplication {
 			Usuario cliente = new Usuario();
 			cliente.setNome("Pedro Alcântara de Bragança e Bourbon");
 			cliente.setNomeSocial("Dom pedro cliente");
-			cliente.getPerfis().add(PerfilUsuario.CLIENTE);
+			cliente.getPerfis().add(PerfilUsuario.ROLE_CLIENTE);
 
 			Email emailCliente = new Email();
 			emailCliente.setEndereco("c@c.com");
@@ -172,14 +172,14 @@ public class AutomanagerApplication {
 
 			cliente.getDocumentos().add(cpfCliente);
 
-			CredencialUsuarioSenha credencialCliente = new CredencialUsuarioSenha();
+			Credencial credencialCliente = new Credencial();
 			credencialCliente.setInativo(false);
 			credencialCliente.setNomeUsuario("dompedrocliente");
 			credencialCliente.setSenha("123456");
 			credencialCliente.setCriacao(new Date());
 			credencialCliente.setUltimoAcesso(new Date());
 
-			cliente.getCredenciais().add(credencialCliente);
+			cliente.setCredencial(credencialCliente);
 
 			Endereco enderecoCliente = new Endereco();
 			enderecoCliente.setEstado("São Paulo");
@@ -200,6 +200,49 @@ public class AutomanagerApplication {
 			cliente.getVeiculos().add(veiculo);
 			
 			empresa.getUsuarios().add(cliente);
+			
+			Usuario admin = new Usuario();
+			admin.setNome("Josévaldo da Silva Farias");
+			admin.setNomeSocial("José");
+			admin.getPerfis().add(PerfilUsuario.ROLE_ADMIN);
+
+			Email emailAdmin = new Email();
+			emailAdmin.setEndereco("z@z.com");
+
+			admin.getEmails().add(emailAdmin);
+
+			Endereco enderecoAdmin = new Endereco();
+			enderecoAdmin.setEstado("Belo Horizonte");
+			enderecoAdmin.setCidade("Minas Gerais");
+			enderecoAdmin.setBairro("Sagrada Família");
+			enderecoAdmin.setRua("R. Pitangui");
+			enderecoAdmin.setNumero("00");
+			enderecoAdmin.setCodigoPostal("31030-069");
+
+			admin.setEndereco(enderecoAdmin);
+
+			Telefone telefoneAdmin = new Telefone();
+			telefoneAdmin.setDdd("031");
+			telefoneAdmin.setNumero("9812345612");
+
+			admin.getTelefones().add(telefoneAdmin);
+
+			Documento cpfAdmin = new Documento();
+			cpfAdmin.setDataEmissao(new Date());
+			cpfAdmin.setNumero("12345678912");
+			cpfAdmin.setTipo(TipoDocumento.CPF);
+			admin.getDocumentos().add(cpfAdmin);
+
+			Credencial credencialAdmin = new Credencial();
+			credencialAdmin.setInativo(false);
+			credencialAdmin.setNomeUsuario("josesilva");
+			credencialAdmin.setSenha("123456");
+			credencialAdmin.setCriacao(new Date());
+			credencialAdmin.setUltimoAcesso(new Date());
+
+			admin.setCredencial(credencialAdmin);
+			
+			empresa.getUsuarios().add(admin);
 
 			Servico trocaRodas = new Servico();
 			trocaRodas.setDescricao("Troca das rodas do carro por novas");
@@ -226,8 +269,6 @@ public class AutomanagerApplication {
 			veiculo.getVendas().add(venda);
 
 			empresa.getVendas().add(venda);
-
-			repositorioEmpresa.save(empresa);
 			
 			Mercadoria rodaLigaLeve2 = new Mercadoria();
 			rodaLigaLeve2.setCadastro(new Date());

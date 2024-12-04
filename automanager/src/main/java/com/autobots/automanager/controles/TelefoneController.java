@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class TelefoneController {
 	@Autowired
 	private AdicionadorLinkTelefone adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/telefone/{id}")
 	public ResponseEntity<Telefone> obterTelefone(@PathVariable long id) {
 		try {
@@ -54,6 +56,7 @@ public class TelefoneController {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/telefones")
 	public ResponseEntity<List<Telefone>> obterTelefones() {
 		List<Telefone> telefones = repositorio.findAll();

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class EmailControle {
 	@Autowired
 	private AdicionadorLinkEmail adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/email/{id}")
 	public ResponseEntity<Email> obterEmail(@PathVariable long id) {
 		try {
@@ -54,6 +56,7 @@ public class EmailControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/emails")
 	public ResponseEntity<List<Email>> obterEmails() {
 		List<Email> emails = repositorio.findAll();
@@ -80,6 +83,7 @@ public class EmailControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarEmail(@RequestBody Email atualizacao) {
 		try {

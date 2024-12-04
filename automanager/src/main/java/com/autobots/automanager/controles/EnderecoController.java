@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class EnderecoController {
 	@Autowired
 	private AdicionadorLinkEndereco adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/endereco/{id}")
 	public ResponseEntity<Endereco> obterEndereco(@PathVariable long id) {
 		try {
@@ -52,6 +54,7 @@ public class EnderecoController {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/enderecos")
 	public ResponseEntity<List<Endereco>> obterEnderecos() {
 		List<Endereco> enderecos = repositorio.findAll();
@@ -114,7 +117,7 @@ public class EnderecoController {
 		}
 	}
 	
-	@GetMapping("/cliente/{id}")
+	@GetMapping("/usuario/{id}")
 	public ResponseEntity<Endereco> pegarEnderecoCliente(@PathVariable long id){
 		Usuario cliente = clienteSelecionador.selecionar(clienteRepositorio, id);
 		

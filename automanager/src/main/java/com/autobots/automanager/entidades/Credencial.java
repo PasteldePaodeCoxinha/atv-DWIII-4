@@ -12,6 +12,8 @@ import javax.persistence.InheritanceType;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,4 +35,11 @@ public class Credencial extends RepresentationModel<Credencial> {
 	
 	@Column(nullable = false)
 	private boolean inativo;
+	
+	@Column(unique = true, nullable = false)
+	private String nomeUsuario;
+	
+	@Column(nullable = false)
+	@JsonIgnore
+	private String senha;
 }

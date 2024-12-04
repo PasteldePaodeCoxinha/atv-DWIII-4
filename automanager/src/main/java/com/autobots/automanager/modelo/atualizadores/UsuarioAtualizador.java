@@ -37,7 +37,7 @@ public class UsuarioAtualizador {
 		documentoAtualizador.atualizar(usuario.getDocumentos(), atualizacao.getDocumentos());
 		telefoneAtualizador.atualizar(usuario.getTelefones(), atualizacao.getTelefones());
 		emailAtualizador.atualizar(usuario.getEmails(), atualizacao.getEmails());
-		credencialAtualizador.atualizar(usuario.getCredenciais(), atualizacao.getCredenciais());
+		credencialAtualizador.atualizar(usuario.getCredencial(), atualizacao.getCredencial());
 		mercadoriaAtualizador.atualizar(usuario.getMercadorias(), atualizacao.getMercadorias());
 		vendaAtualizador.atualizar(usuario.getVendas(), atualizacao.getVendas());
 		veiculoAtualizador.atualizar(usuario.getVeiculos(), atualizacao.getVeiculos());

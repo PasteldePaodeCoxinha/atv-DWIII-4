@@ -14,11 +14,12 @@ import com.autobots.automanager.entidades.Telefone;
 
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Long> {
 	
+	Usuario findByNome(String nome);
 	Usuario findByDocumentos(Documento documento);
 	Usuario findByEndereco(Endereco endereco);
 	Usuario findByTelefones(Telefone telefone);
 	Usuario findByEmails(Email email);
-	Usuario findByCredenciais(Credencial credencial);
+	Usuario findByCredencial(Credencial credencial);
 	Usuario findByMercadorias(Mercadoria mercadoria);
 	Usuario findByVendas(Venda venda);
 	Usuario findByVeiculos(Veiculo veiculo);

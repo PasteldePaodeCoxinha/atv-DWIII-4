@@ -19,6 +19,7 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Documento extends RepresentationModel<Documento> {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

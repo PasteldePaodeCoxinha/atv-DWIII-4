@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,8 @@ public class VeiculoControle {
 	private UsuarioSelecionador clienteSelecionador;
 	@Autowired
 	private AdicionadorLinkVeiculo adicionadorLink;
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/veiculo/{id}")
 	public ResponseEntity<Veiculo> obterVeiculo(@PathVariable long id) {
 		try {
@@ -54,6 +56,7 @@ public class VeiculoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/veiculos")
 	public ResponseEntity<List<Veiculo>> obterVeiculos() {
 		List<Veiculo> veiculos = repositorio.findAll();
@@ -66,6 +69,7 @@ public class VeiculoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarVeiculo(@RequestBody Veiculo veiculo) {
 		try {
@@ -80,6 +84,7 @@ public class VeiculoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarVeiculo(@RequestBody Veiculo atualizacao) {
 		try {
@@ -98,6 +103,7 @@ public class VeiculoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@DeleteMapping("/excluir")
 	public ResponseEntity<?> excluirVeiculo(@RequestBody Veiculo exclusao) {
 		try {
@@ -116,7 +122,8 @@ public class VeiculoControle {
 		}
 	}
 	
-	@GetMapping("/cliente/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
+	@GetMapping("/usuario/{id}")
 	public ResponseEntity<Set<Veiculo>> pegarVeiculosCliente(@PathVariable long id){
 		Usuario cliente = clienteSelecionador.selecionar(clienteRepositorio, id);
 		

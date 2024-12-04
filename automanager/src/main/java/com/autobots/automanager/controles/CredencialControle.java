@@ -1,12 +1,11 @@
 package com.autobots.automanager.controles;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Usuario;
 import com.autobots.automanager.entidades.Credencial;
-import com.autobots.automanager.entidades.CredencialCodigoBarra;
-import com.autobots.automanager.entidades.CredencialUsuarioSenha;
 import com.autobots.automanager.modelo.adicionadoresLink.AdicionadorLinkCredencial;
 import com.autobots.automanager.modelo.atualizadores.CredencialAtualizador;
 import com.autobots.automanager.modelo.selecionadores.CredencialSelecionador;
@@ -40,7 +37,8 @@ public class CredencialControle {
 	private UsuarioSelecionador clienteSelecionador;
 	@Autowired
 	private AdicionadorLinkCredencial adicionadorLink;
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/credencial/{id}")
 	public ResponseEntity<Credencial> obterCredencial(@PathVariable long id) {
 		try {
@@ -55,7 +53,8 @@ public class CredencialControle {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/credencials")
 	public ResponseEntity<List<Credencial>> obterCredencials() {
 		List<Credencial> credencials = repositorio.findAll();
@@ -67,9 +66,10 @@ public class CredencialControle {
 			return new ResponseEntity<List<Credencial>>(credencials, HttpStatus.FOUND);
 		}
 	}
-
-	@PostMapping("/cadastroCodigoBarra")
-	public ResponseEntity<?> cadastrarCredencial(@RequestBody CredencialCodigoBarra credencial) {
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@PostMapping("/cadastroUsuarioSenha")
+	public ResponseEntity<?> cadastrarCredencial(@RequestBody Credencial credencial) {
 		try {
 			if (credencial.getId() == null) {
 				repositorio.save(credencial);
@@ -82,20 +82,6 @@ public class CredencialControle {
 		}
 	}
 	
-	@PostMapping("/cadastroUsuarioSenha")
-	public ResponseEntity<?> cadastrarCredencial(@RequestBody CredencialUsuarioSenha credencial) {
-		try {
-			if (credencial.getId() == null) {
-				repositorio.save(credencial);
-				return new ResponseEntity<>(HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
-		}
-	}
-
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarCredencial(@RequestBody Credencial atualizacao) {
 		try {
@@ -118,12 +104,12 @@ public class CredencialControle {
 	public ResponseEntity<?> excluirCredencial(@RequestBody Credencial exclusao) {
 		try {
 			Credencial credencial = repositorio.getById(exclusao.getId());
-			Usuario cliente = clienteRepositorio.findByCredenciais(credencial);
+			Usuario cliente = clienteRepositorio.findByCredencial(credencial);
 			
 			if (credencial.getId() == null || cliente.getId() == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} else {
-				cliente.getCredenciais().remove(credencial);
+				cliente.setCredencial(null);
 				repositorio.delete(credencial);
 				return new ResponseEntity<>(HttpStatus.OK);
 			}
@@ -132,16 +118,16 @@ public class CredencialControle {
 		}
 	}
 	
-	@GetMapping("/cliente/{id}")
-	public ResponseEntity<Set<Credencial>> pegarCredencialsCliente(@PathVariable long id){
+	@GetMapping("/usuario/{id}")
+	public ResponseEntity<Credencial> pegarCredencialsCliente(@PathVariable long id){
 		Usuario cliente = clienteSelecionador.selecionar(clienteRepositorio, id);
 		
 		if (cliente.getId() == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			Set<Credencial> credencials = cliente.getCredenciais();
-			adicionadorLink.adicionarLink(new ArrayList<>(credencials));
-			return new ResponseEntity<Set<Credencial>>(credencials, HttpStatus.FOUND);
+			Credencial credencials = cliente.getCredencial();
+			adicionadorLink.adicionarLink(credencials);
+			return new ResponseEntity<Credencial>(credencials, HttpStatus.FOUND);
 		}
 	}
 }

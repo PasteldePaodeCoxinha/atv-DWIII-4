@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class ServicoControle {
 	@Autowired
 	private AdicionadorLinkServico adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@GetMapping("/servico/{id}")
 	public ResponseEntity<Servico> obterServico(@PathVariable long id) {
 		try {
@@ -47,6 +49,7 @@ public class ServicoControle {
 		
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/servicos")
 	public ResponseEntity<List<Servico>> obterServicos() {
 		List<Servico> servicos = repositorio.findAll();
@@ -59,6 +62,7 @@ public class ServicoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarServico(@RequestBody Servico servico) {
 		try {
@@ -73,6 +77,7 @@ public class ServicoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarServico(@RequestBody Servico atualizacao) {
 		
@@ -91,6 +96,7 @@ public class ServicoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@DeleteMapping("/excluir")
 	public ResponseEntity<?> excluirServico(@RequestBody Servico exclusao) {
 		try {

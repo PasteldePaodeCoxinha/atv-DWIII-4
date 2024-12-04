@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class MercadoriaControle {
 	@Autowired
 	private AdicionadorLinkMercadoria adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/mercadoria/{id}")
 	public ResponseEntity<Mercadoria> obterMercadoria(@PathVariable long id) {
 		try {
@@ -53,7 +55,8 @@ public class MercadoriaControle {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/mercadorias")
 	public ResponseEntity<List<Mercadoria>> obterMercadorias() {
 		List<Mercadoria> mercadorias = repositorio.findAll();
@@ -65,7 +68,8 @@ public class MercadoriaControle {
 			return new ResponseEntity<List<Mercadoria>>(mercadorias, HttpStatus.FOUND);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarMercadoria(@RequestBody Mercadoria mercadoria) {
 		try {
@@ -79,7 +83,8 @@ public class MercadoriaControle {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarMercadoria(@RequestBody Mercadoria atualizacao) {
 		try {
@@ -97,7 +102,8 @@ public class MercadoriaControle {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@DeleteMapping("/excluir")
 	public ResponseEntity<?> excluirMercadoria(@RequestBody Mercadoria exclusao) {
 		try {
@@ -116,7 +122,8 @@ public class MercadoriaControle {
 		}
 	}
 	
-	@GetMapping("/cliente/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
+	@GetMapping("/usuario/{id}")
 	public ResponseEntity<Set<Mercadoria>> pegarMercadoriasCliente(@PathVariable long id){
 		Usuario cliente = clienteSelecionador.selecionar(clienteRepositorio, id);
 		

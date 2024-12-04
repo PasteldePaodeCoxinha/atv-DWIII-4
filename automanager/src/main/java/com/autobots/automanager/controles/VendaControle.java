@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class VendaControle {
 	@Autowired
 	private AdicionadorLinkVenda adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/venda/{id}")
 	public ResponseEntity<Venda> obterVenda(@PathVariable long id) {
 		try {
@@ -54,6 +56,7 @@ public class VendaControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@GetMapping("/vendas")
 	public ResponseEntity<List<Venda>> obterVendas() {
 		List<Venda> vendas = repositorio.findAll();
@@ -66,6 +69,7 @@ public class VendaControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarVenda(@RequestBody Venda venda) {
 		try {
@@ -80,6 +84,7 @@ public class VendaControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarVenda(@RequestBody Venda atualizacao) {
 		try {
@@ -98,6 +103,7 @@ public class VendaControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
 	@DeleteMapping("/excluir")
 	public ResponseEntity<?> excluirVenda(@RequestBody Venda exclusao) {
 		try {
@@ -116,7 +122,8 @@ public class VendaControle {
 		}
 	}
 	
-	@GetMapping("/cliente/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE', 'ROLE_VENDEDOR')")
+	@GetMapping("/usuario/{id}")
 	public ResponseEntity<Set<Venda>> pegarVendasCliente(@PathVariable long id){
 		Usuario cliente = clienteSelecionador.selecionar(clienteRepositorio, id);
 		

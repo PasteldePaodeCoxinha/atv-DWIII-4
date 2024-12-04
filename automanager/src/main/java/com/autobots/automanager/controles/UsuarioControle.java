@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,7 @@ public class UsuarioControle {
 		
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/usuarios")
 	public ResponseEntity<List<Usuario>> obterUsuarios() {
 		List<Usuario> usuarios = repositorio.findAll();
@@ -58,7 +60,8 @@ public class UsuarioControle {
 			return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.FOUND);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarUsuario(@RequestBody Usuario usuario) {
 		try {
@@ -72,7 +75,8 @@ public class UsuarioControle {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GERENTE')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarUsuario(@RequestBody Usuario atualizacao) {
 		
@@ -90,7 +94,7 @@ public class UsuarioControle {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
 		}
 	}
-
+	
 	@DeleteMapping("/excluir")
 	public ResponseEntity<?> excluirUsuario(@RequestBody Usuario exclusao) {
 		try {

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class DocumentoControle {
 	@Autowired
 	private AdicionadorLinkDocumento adicionadorLink;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/documento/{id}")
 	public ResponseEntity<Documento> obterDocumento(@PathVariable long id) {
 		try {
@@ -54,6 +56,8 @@ public class DocumentoControle {
 		}
 	}
 
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/documentos")
 	public ResponseEntity<List<Documento>> obterDocumentos() {
 		List<Documento> documentos = repositorio.findAll();
@@ -80,6 +84,7 @@ public class DocumentoControle {
 		}
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar")
 	public ResponseEntity<?> atualizarDocumento(@RequestBody Documento atualizacao) {
 		try {
@@ -116,7 +121,7 @@ public class DocumentoControle {
 		}
 	}
 	
-	@GetMapping("/cliente/{id}")
+	@GetMapping("/usuario/{id}")
 	public ResponseEntity<Set<Documento>> pegarDocumentosCliente(@PathVariable long id){
 		Usuario cliente = clienteSelecionador.selecionar(clienteRepositorio, id);
 		

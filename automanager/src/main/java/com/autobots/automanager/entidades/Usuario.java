@@ -60,8 +60,8 @@ public class Usuario extends RepresentationModel<Usuario>{
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Email> emails = new HashSet<Email>();
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Credencial> credenciais = new HashSet<Credencial>();
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Credencial credencial;
 	
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private Set<Mercadoria> mercadorias = new HashSet<Mercadoria>();
